@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-text: var(--text);
+}
+
+:root {
+  --background: #ebd3f8;
+  --primary: #7a1cac;
+  --secondary: #ad49e1;
+  --tertiary: #4f1787;
+  --border: #2e073f;
+  --input: #2e073f;
+  --ring: #ebd3f8;
+  --text: #2e073f;
+}
+
+.dark {
+  --background: #2e073f;
+  --primary: #7a1cac;
+  --secondary: #ad49e1;
+  --tertiary: #4f1787;
+  --border: #ebd3f8;
+  --input: #ebd3f8;
+  --ring: #2e073f;
+  --text: #ebd3f8;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background;
+  }
+}
