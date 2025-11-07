@@ -8,6 +8,7 @@ type InputProps = React.ComponentProps<typeof InputComponent> & {
   error?: string;
   variant?: "colored" | "default";
   required?: boolean;
+  parentClassName?: string;
 };
 
 export default function Input({
@@ -15,14 +16,16 @@ export default function Input({
   error,
   variant = "default",
   required = false,
+  parentClassName,
   ...props
 }: InputProps) {
   const variants = {
-    default: "bg-transparent",
-    colored: "bg-background opacity-50",
+    default: "bg-transparent/40",
+    colored:
+      "bg-background/70 border-background/50 hover:ring-[1px] ring-ring/50 focus-visible:ring-[2px] focus-visible:ring-ring/50",
   };
   return (
-    <div>
+    <div className={parentClassName}>
       {label && (
         <Typography
           variant="small"

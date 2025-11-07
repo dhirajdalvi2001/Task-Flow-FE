@@ -6,8 +6,13 @@ import {
 } from "@/validations/signup-validations";
 import { z } from "zod";
 import { Button, Input } from "@/components";
+import { openAxiosInstance } from "@/hooks/axios";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -17,11 +22,21 @@ export default function SignUp() {
     defaultValues: initialValues,
   });
 
+  const { mutate: signup, isPending } = useMutation({
+    mutationFn: (data: z.infer<typeof validationSchema>) => {
+      return openAxiosInstance.post("/iam/sign-up/", data);
+    },
+    onSuccess: () => {
+      toast.success("Signup successful!");
+      navigate("/auth/login");
+    },
+  });
+
   function onSubmit(data: z.infer<typeof validationSchema>) {
-    console.log(data, "data DD");
+    signup(data);
   }
 
-  const fieldsDisabled = false;
+  const fieldsDisabled = isPending;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-3">

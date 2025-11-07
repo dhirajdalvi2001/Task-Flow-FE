@@ -20,6 +20,7 @@ export default function Login() {
 
   const {
     register,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<z.infer<typeof validationSchema>>({
@@ -27,27 +28,25 @@ export default function Login() {
     defaultValues: initialValues,
   });
 
-  const { mutate: login } = useMutation({
+  const { mutate: login, isPending } = useMutation({
     mutationFn: (data: z.infer<typeof validationSchema>) => {
       return openAxiosInstance.post("/iam/login/", data);
     },
     onSuccess: (data) => {
       const response = data.data;
-      console.log(
-        data,
-        response,
-        response?.access_token,
-        response?.refresh_token,
-        " response DD"
-      );
       setCookie("accessToken", response?.access, 1);
       setCookie("refreshToken", response?.refresh, 7);
       setUserDetails(response?.user);
       toast.success("Login successful!");
       navigate("/");
     },
-    onError: (error) => {
-      console.log(error, " error DD");
+    onError: (error: any) => {
+      const errors = error.response.data;
+      Object.entries(errors).forEach(([key, value]) => {
+        setError(key as keyof z.infer<typeof validationSchema>, {
+          message: value as string,
+        });
+      });
     },
   });
 
@@ -55,7 +54,7 @@ export default function Login() {
     login(data);
   }
 
-  const fieldsDisabled = false;
+  const fieldsDisabled = isPending;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">

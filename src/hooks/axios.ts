@@ -32,9 +32,9 @@ protectedAxiosInstance.interceptors.request.use(
 
 protectedAxiosInstance.interceptors.response.use(
   (response) => {
-    return response;
+    return response.data;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+    (error) => {
+      return Promise.reject(error.response.data);
+    }
 );

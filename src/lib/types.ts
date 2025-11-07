@@ -9,3 +9,25 @@ export type UserDetails = {
   is_staff: boolean;
   is_superuser: boolean;
 };
+
+export type DashboardCharts = {
+  cancelled_tasks: number;
+  completed_tasks: number;
+  in_progress_tasks: number;
+  pending_tasks: number;
+  tasks_due_in_three_days: number;
+  tasks_overdue: number;
+  total_tasks: number;
+};
+
+export type Task = {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  due_date: string;
+  priority: string;
+  is_check_list: boolean;
+  is_pinned: boolean;
+  sequence: number;
+};

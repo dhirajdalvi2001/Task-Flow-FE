@@ -13,3 +13,7 @@ export const setCookie = (name: string, value: string, days: number) => {
   const expires = `expires=${date.toUTCString()}`;
   document.cookie = `${name}=${value};${expires};path=/`;
 };
+
+export const deleteCookie = (name: string) => {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+};

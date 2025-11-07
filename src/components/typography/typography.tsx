@@ -1,5 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
+import { Tooltip } from "..";
 
 type TypographyProps = {
   children: React.ReactNode;
@@ -16,6 +17,8 @@ type TypographyProps = {
     | "tiny";
   className?: string;
   htmlFor?: string;
+  tooltipContent?: string;
+  onClick?: () => void;
 };
 
 const variants = {
@@ -23,7 +26,7 @@ const variants = {
   h2: "text-xl md:text-3xl font-bold text-text",
   h3: "text-lg md:text-2xl font-bold text-text",
   h4: "text-base md:text-xl font-bold text-text",
-  h5: "text-sm md:text-lg font-bold text-text",
+  h5: "text-sm md:text-base lg:text-lg font-bold text-text",
   h6: "text-xs md:text-base font-bold text-text",
   p: "text-sm md:text-base font-normal text-text",
   span: "text-sm md:text-base font-normal text-text",
@@ -37,11 +40,19 @@ export default function Typography({
   variant = "p",
   htmlFor,
   className,
+  tooltipContent,
+  onClick,
 }: TypographyProps) {
   const Component = htmlFor ? "label" : "div";
   return (
-    <Component className={cn(variants[variant], className)} htmlFor={htmlFor}>
-      {children}
-    </Component>
+    <Tooltip content={tooltipContent ? tooltipContent : undefined}>
+      <Component
+        className={cn(variants[variant], className)}
+        htmlFor={htmlFor}
+        onClick={onClick}
+      >
+        {children}
+      </Component>
+    </Tooltip>
   );
 }
