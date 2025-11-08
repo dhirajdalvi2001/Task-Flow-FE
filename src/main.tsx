@@ -13,7 +13,17 @@ export const queryClient = new QueryClient({
   },
 });
 
-createRoot(document.getElementById("root")!).render(
+const container = document.getElementById("root")!;
+
+// 👇 only createRoot once
+let root = (container as any)._reactRootContainer || null;
+
+if (!root) {
+  root = createRoot(container);
+  (container as any)._reactRootContainer = root;
+}
+
+root.render(
   <QueryClientProvider client={queryClient}>
     <App />
     <Toaster />

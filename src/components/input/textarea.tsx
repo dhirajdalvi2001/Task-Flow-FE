@@ -16,28 +16,38 @@ export default function Textarea({
   error,
   required = false,
   parentClassName,
+  variant = "default",
   ...props
 }: TextareaProps) {
+  const variants = {
+    default: "bg-transparent/40",
+    colored:
+      "bg-background/70 border-background/50 hover:ring-[1px] ring-ring/50 focus-visible:ring-[2px] focus-visible:ring-ring/50",
+  };
   return (
     <div className={parentClassName}>
       {label && (
         <Typography
           variant="small"
           htmlFor={props.id}
-          className="text-background"
+          className="text-white/80"
         >
           {label} {required && <span className="text-red-500">*</span>}
         </Typography>
       )}
       <TextareaComponent
         {...props}
-        className={cn("text-xs md:text-sm bg-transparent/40 border-background/20 focus-visible:border-background/20 text-white font-medium lg:text-lg", props.className)}
+        className={cn(
+          "text-xs md:text-sm bg-transparent/40 border-background/20 focus-visible:border-background/20",
+          variants[variant],
+          props.className
+        )}
       />
       {error && (
-        <Typography variant="small" className="text-red-500">
+        <Typography variant="small" className="absolute text-red-500">
           {error}
         </Typography>
       )}
     </div>
-  )
+  );
 }

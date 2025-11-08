@@ -64,6 +64,7 @@ export default function Login() {
         type="text"
         placeholder="Username"
         {...register("username")}
+        autoFocus={true}
         variant="colored"
         error={errors.username?.message}
         disabled={fieldsDisabled}

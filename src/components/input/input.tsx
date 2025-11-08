@@ -30,7 +30,7 @@ export default function Input({
         <Typography
           variant="small"
           htmlFor={props.id}
-          className="text-background"
+          className="text-white/80"
         >
           {label} {required && <span className="text-red-500">*</span>}
         </Typography>

@@ -30,3 +30,9 @@ export { default as EditableInput } from "./editable-input/editable-input";
 
 // Loader
 export { default as CommonLoader } from "./loader/common-loader";
+
+// Datepicker
+export { default as Datepicker } from "./datepicker/datepicker";
+
+// Popup
+export { default as Popup } from "./popup/popup";
