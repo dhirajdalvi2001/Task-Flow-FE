@@ -43,7 +43,7 @@ export default function AuthLayout() {
     >
       <div
         className={cn(
-          "w-full min-h-[340px] max-w-md bg-linear-to-br from-primary/30 via-80% via-transparent to-background/60 border-2 border-background/50 p-4 rounded-lg sm:rounded-3xl flex flex-col justify-center gap-4 transition-all duration-500",
+          "mx-auto w-[80%] sm:w-full min-h-[340px] max-w-md bg-linear-to-br from-primary/30 via-80% via-transparent to-background/60 border-2 border-background/50 p-4 rounded-lg sm:rounded-3xl flex flex-col justify-center gap-4 transition-all duration-500",
           scaleContainer && "scale-[104%]"
         )}
       >
