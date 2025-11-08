@@ -1,12 +1,21 @@
 import type { Task } from "@/lib/types";
-import { Badge, EditableInput, Select, Typography, Datepicker } from "..";
+import {
+  Badge,
+  EditableInput,
+  Select,
+  Typography,
+  Datepicker,
+  Button,
+} from "..";
 import { cn, formatDate, formatFullDate } from "@/lib/utils";
-import { ChevronDown, Minus, ChevronUp } from "lucide-react";
+import { ChevronDown, Minus, ChevronUp, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PRIORITY_OPTIONS, STATUS_OPTIONS } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/hooks/axios";
 import { getColorsByDueDate, invalidateQueries } from "@/lib/utils";
+import { toast } from "sonner";
+import ConfirmationPopover from "../confirmation-popover/confirmation-popover";
 
 export default function TaskCard({
   id,
@@ -40,6 +49,19 @@ export default function TaskCard({
     },
     onSuccess: () => {
       invalidateQueries(["get-my-tasks"]);
+    },
+  });
+
+  const { mutate: deleteTask, isPending: isDeleting } = useMutation({
+    mutationFn: (id: string) => {
+      return protectedAxiosInstance.delete(`/tasks/${id}/`);
+    },
+    onSuccess: () => {
+      invalidateQueries(["get-my-tasks"]);
+      toast.success("Task deleted successfully");
+    },
+    onError: () => {
+      toast.error("Failed to delete task");
     },
   });
 
@@ -84,10 +106,23 @@ export default function TaskCard({
     <div
       {...dragListeners}
       className={cn(
-        "min-h-32 sm:min-h-48 h-fit bg-linear-to-br from-tertiary/30 via-80% via-transparent to-tertiary/5 border-2 border-background/50 p-2 sm:p-7 flex flex-col justify-between gap-2 rounded-lg sm:rounded-3xl relative hover:border-tertiary/10 transition-all duration-150 cursor-grab",
+        "min-h-32 sm:min-h-48 h-fit bg-linear-to-br from-tertiary/30 via-80% via-transparent to-tertiary/5 border-2 border-background/50 bg-blur-md backdrop-blur-sm2 p-2 sm:p-7 flex flex-col justify-between gap-2 rounded-lg sm:rounded-3xl relative hover:border-tertiary/10 transition-all duration-150 cursor-grab overflow-hidden",
         isDragging && "cursor-grabbing"
       )}
     >
+      <div className="absolute top-0 right-0 bg-red-500/60 rounded-bl-2xl">
+        <ConfirmationPopover
+          trigger={
+            <Button variant="ghost" size="icon" disabled={isDeleting}>
+              <Trash className="size-4 text-white" />
+            </Button>
+          }
+          title="Delete Task"
+          description="Are you sure you want to delete this task?"
+          onConfirm={() => deleteTask(id)}
+          isLoading={isDeleting}
+        />
+      </div>
       <div className="flex justify-between items-start flex-wrap">
         <div className="w-[calc(100%-150px)] flex items-start gap-1 sm:gap-2">
           <div>

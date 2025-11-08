@@ -30,7 +30,7 @@ export default function RootLayout() {
       {/* Top Navbar */}
       <nav
         className={cn(
-          "h-fit flex justify-between max-sm:items-center p-2 sm:p-4 max-sm:bg-tertiary/60 sm:bg-linear-to-tr via-60% via-transparent from-transparent to-secondary/60 sticky top-0 z-50",
+          "h-fit flex justify-between max-sm:items-center p-2 sm:p-4 max-sm:bg-tertiary/60 sm:bg-linear-to-tr via-60% via-transparent from-transparent to-secondary/60 bg-blur-md backdrop-blur-sm sticky top-0 z-50",
           isScrolled
             ? "h-fit bg-tertiary/80 sm:bg-linear-to-tr via-60% via-transparent from-transparent to-secondary/80 transition-all duration-150"
             : "sm:h-32"

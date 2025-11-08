@@ -67,7 +67,10 @@ export default function CreateTask() {
         <Popup title="Create a new task" open={open} onOpenChange={setOpen}>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className={cn("flex flex-col gap-3", isMobile ? "p-3" : "")}
+            className={cn(
+              "flex flex-col gap-3 max-h-[70vh] overflow-y-auto",
+              isMobile ? "p-3" : ""
+            )}
           >
             <Input
               label="Title"

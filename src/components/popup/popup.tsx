@@ -16,13 +16,15 @@ export default function Popup({ children, open, onOpenChange, title, description
   if (isTablet || isDesktop) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-linear-to-br from-tertiary/30 via-80% via-transparent to-tertiary/5 border-none rounded-lg md:rounded-2xl">
-        {title && <DialogTitle className='text-tertiary'>{title}</DialogTitle>}
-        {description && <DialogDescription>{description}</DialogDescription>}
-        {children}
-      </DialogContent>
-    </Dialog>
-    )
+        <DialogContent className="bg-linear-to-br from-tertiary/30 to-tertiary/15  border-none rounded-lg md:rounded-2xl">
+          {title && (
+            <DialogTitle className="text-tertiary">{title}</DialogTitle>
+          )}
+          {description && <DialogDescription>{description}</DialogDescription>}
+          {children}
+        </DialogContent>
+      </Dialog>
+    );
   }
   
   return (
