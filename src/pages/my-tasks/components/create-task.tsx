@@ -116,7 +116,7 @@ export default function CreateTask() {
             <Button
               type="submit"
               variant="default"
-              className="mt-4 w-fit border-none bg-primary text-background"
+              className="mt-4 ml-auto w-fit border-none bg-primary text-background"
               disabled={fieldsDisabled}
             >
               Create

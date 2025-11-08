@@ -8,7 +8,7 @@ import {
   Button,
 } from "..";
 import { cn, formatDate, formatFullDate } from "@/lib/utils";
-import { ChevronDown, Minus, ChevronUp, Trash } from "lucide-react";
+import { ChevronDown, Minus, ChevronUp, Trash, Pin } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PRIORITY_OPTIONS, STATUS_OPTIONS } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
@@ -24,6 +24,7 @@ export default function TaskCard({
   status,
   due_date,
   priority,
+  is_pinned,
   isDragging = false,
   dragListeners,
 }: Task & { isDragging?: boolean; dragListeners?: any }) {
@@ -44,6 +45,7 @@ export default function TaskCard({
       title?: string;
       description?: string | null;
       due_date?: string;
+      is_pinned?: boolean;
     }) => {
       return protectedAxiosInstance.patch(`/tasks/${id}/`, data);
     },
@@ -106,15 +108,38 @@ export default function TaskCard({
     <div
       {...dragListeners}
       className={cn(
-        "min-h-32 sm:min-h-48 h-fit bg-linear-to-br from-tertiary/30 via-80% via-transparent to-tertiary/5 border-2 border-background/50 bg-blur-md backdrop-blur-sm2 p-2 sm:p-7 flex flex-col justify-between gap-2 rounded-lg sm:rounded-3xl relative hover:border-tertiary/10 transition-all duration-150 cursor-grab overflow-hidden",
+        "min-h-32 sm:min-h-48 h-fit bg-linear-to-br from-tertiary/30 via-80% via-transparent to-tertiary/5 border-2 border-background/50 bg-blur-md backdrop-blur-sm2 py-3 px-7 sm:p-7 flex flex-col justify-between gap-2 rounded-lg sm:rounded-3xl relative hover:border-tertiary/10 transition-all duration-150 cursor-grab overflow-hidden group",
         isDragging && "cursor-grabbing"
       )}
     >
-      <div className="absolute top-0 right-0 bg-red-500/60 rounded-bl-2xl">
+      <div
+        className={cn(
+          "absolute top-0 left-0 rounded-br-xl md:rounded-br-2xl",
+          is_pinned
+            ? "bg-tertiary/80 group-hover:bg-tertiary/90 opacity-100"
+            : "bg-tertiary/20 group-hover:bg-tertiary/30 opacity-0 group-hover:opacity-100"
+        )}
+      >
+        <Button
+          variant="ghost"
+          size="icon"
+          disabled={isDeleting}
+          className="p-1 h-6 w-6 md:h-8 md:w-8"
+          onClick={() => updateTask({ is_pinned: !is_pinned })}
+        >
+          <Pin className="size-3 text-white" />
+        </Button>
+      </div>
+      <div className="absolute top-0 right-0 bg-red-500/60 rounded-bl-xl md:rounded-bl-2xl">
         <ConfirmationPopover
           trigger={
-            <Button variant="ghost" size="icon" disabled={isDeleting}>
-              <Trash className="size-4 text-white" />
+            <Button
+              variant="ghost"
+              size="icon"
+              disabled={isDeleting}
+              className="p-1 h-6 w-6 md:h-8 md:w-8"
+            >
+              <Trash className="size-3 text-white" />
             </Button>
           }
           title="Delete Task"
@@ -124,7 +149,7 @@ export default function TaskCard({
         />
       </div>
       <div className="flex justify-between items-start flex-wrap">
-        <div className="w-[calc(100%-150px)] flex items-start gap-1 sm:gap-2">
+        <div className="px-1 w-[calc(100%-156px)] flex items-center gap-2">
           <div>
             <Select
               options={PRIORITY_OPTIONS}
@@ -148,6 +173,7 @@ export default function TaskCard({
             <EditableInput
               value={title}
               handleSave={(value) => updateTask({ title: value })}
+              className="!text-base md:!text-sm"
             />
           </div>
         </div>
@@ -197,7 +223,7 @@ export default function TaskCard({
           }
           isTextArea={true}
           className={cn(
-            "mb-auto text-tertiary/80 overflow-hidden text-ellipsis line-clamp-5 sm:line-clamp-7 text-xs md:text-sm font-normal",
+            "mb-auto text-tertiary/80 overflow-hidden text-ellipsis line-clamp-5 sm:line-clamp-7 !text-xs md:!text-sm font-normal",
             !description ? "min-h-fit italic text-tertiary/50" : "min-h-[50px]"
           )}
         />

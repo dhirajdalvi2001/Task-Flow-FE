@@ -75,14 +75,15 @@ export default function EditableInput({ value, handleSave, isTextArea = false, c
       <Typography
         variant="h5"
         className={cn(
-          "pr-5 text-tertiary/80 font-bold flex items-start gap-2 cursor-pointer relative",
+          "pr-5 text-tertiary/80 font-bold flex items-center gap-2 cursor-pointer relative",
           isTextArea && "!min-h-[102px]",
           className
         )}
         htmlFor="editable-input"
         onClick={handleClick}
       >
-        {valueToShow} <Edit className="absolute top-0 right-0 min-w-4 w-4" />
+        <span className="mr-1">{valueToShow}</span>
+        <Edit className="absolute top-0 right-0 min-w-4 w-4" />
       </Typography>
     );
   }
@@ -95,7 +96,7 @@ export default function EditableInput({ value, handleSave, isTextArea = false, c
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
       className={cn(
-        "p-0 !min-h-[102px] ring-0 focus-visible:ring-0 outline-none border-[1px] border-tertiary/20 focus-visible:border-tertiary/20 !text-tertiary font-medium text-sm md:text-base lg:text-lg whitespace-pre-wrap break-words resize-none",
+        "p-0 !min-h-[102px] ring-0 focus-visible:ring-0 outline-none border-[1px] border-tertiary/20 focus-visible:border-tertiary/20 !text-tertiary font-medium text-xs md:text-sm whitespace-pre-wrap break-words resize-none",
         filterTruncationClasses(className)
       )}
       parentClassName="w-full min-h-[102px] max-h-[200px] overflow-y-auto"
@@ -109,7 +110,7 @@ export default function EditableInput({ value, handleSave, isTextArea = false, c
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
       className={cn(
-        "p-0 min-h-7 h-full ring-0 focus-visible:ring-0 outline-none border-[1px] border-tertiary/20 focus-visible:border-tertiary/20 text-tertiary font-medium text-sm md:text-base lg:text-lg",
+        "p-0 min-h-7 h-full ring-0 focus-visible:ring-0 outline-none border-[1px] border-tertiary/20 focus-visible:border-tertiary/20 text-tertiary font-medium text-xs md:text-sm ",
         filterTruncationClasses(className)
       )}
       parentClassName="w-full"

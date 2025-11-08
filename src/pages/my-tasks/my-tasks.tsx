@@ -21,6 +21,9 @@ import { invalidateQueries } from "@/lib/utils";
 import CreateTask from "./components/create-task";
 
 export default function MyTasks() {
+  const [sortedPinnedTasks, setSortedPinnedTasks] = useState<Task[]>([]);
+  const [sortedUnpinnedTasks, setSortedUnpinnedTasks] = useState<Task[]>([]);
+
   const { mutate: changeSequence } = useMutation({
     mutationFn: (data: { id: string; sequence: number }) => {
       return protectedAxiosInstance.post(`/tasks/change-sequence/`, {
@@ -42,10 +45,6 @@ export default function MyTasks() {
     },
     gcTime: 1000 * 60 * 10, // 10 minutes - cache time
   });
-
-  const [sortedTasks, setSortedTasks] = useState<Task[]>(
-    myTasks?.sort((a: Task, b: Task) => a.sequence - b.sequence) ?? []
-  );
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -57,8 +56,18 @@ export default function MyTasks() {
   // 🧩 Update local state whenever tasks load
   useEffect(() => {
     if (myTasks) {
-      const sorted = [...myTasks].sort((a, b) => a.sequence - b.sequence);
-      setSortedTasks(sorted);
+      const filteredTasksData = myTasks.filter((task) => task.is_pinned);
+      const filteredUnpinnedTasksData = myTasks.filter(
+        (task) => !task.is_pinned
+      );
+      const sortedPinnedTasksData = filteredTasksData.sort(
+        (a, b) => a.sequence - b.sequence
+      );
+      const sortedUnpinnedTasksData = filteredUnpinnedTasksData.sort(
+        (a, b) => a.sequence - b.sequence
+      );
+      setSortedPinnedTasks(sortedPinnedTasksData);
+      setSortedUnpinnedTasks(sortedUnpinnedTasksData);
     }
   }, [myTasks]);
 
@@ -66,7 +75,7 @@ export default function MyTasks() {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    setSortedTasks((items) => {
+    setSortedUnpinnedTasks((items) => {
       const oldIndex = items.findIndex((t) => t.id === active.id);
       const newIndex = items.findIndex((t) => t.id === over.id);
 
@@ -76,7 +85,7 @@ export default function MyTasks() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[90%] xl:max-w-7xl flex flex-col gap-4">
+    <div className="mx-auto max-sm:py-7 w-full max-w-[90%] xl:max-w-7xl flex flex-col gap-4">
       <CreateTask />
       <DndContext
         sensors={sensors}
@@ -84,7 +93,7 @@ export default function MyTasks() {
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={sortedTasks.map((task) => task.id)}
+          items={sortedPinnedTasks.map((task) => task.id)}
           strategy={rectSortingStrategy}
         >
           <div className="py-5 sm:py-10 w-full mx-auto columns-1 md:columns-2 xl:columns-3 gap-4 [&>*]:mb-4">
@@ -95,7 +104,29 @@ export default function MyTasks() {
                     className="w-full min-h-32 sm:min-h-48 h-fit rounded-lg sm:rounded-3xl bg-linear-to-br from-tertiary/30 via-50% via-transparent to-tertiary/5"
                   />
                 ))
-              : sortedTasks?.map((task: Task) => (
+              : sortedPinnedTasks?.map((task: Task) => (
+                  <div key={task.id} className="break-inside-avoid">
+                    <SortableTaskCard task={task} />
+                  </div>
+                ))}
+          </div>
+        </SortableContext>
+        {sortedPinnedTasks.length > 0 && !isLoading && (
+          <hr className="my-4 border-tertiary/50" />
+        )}
+        <SortableContext
+          items={sortedUnpinnedTasks.map((task) => task.id)}
+          strategy={rectSortingStrategy}
+        >
+          <div className="py-5 sm:py-10 w-full mx-auto columns-1 md:columns-2 xl:columns-3 gap-4 [&>*]:mb-4">
+            {isLoading
+              ? Array.from({ length: 6 }).map((_, index) => (
+                  <CommonLoader
+                    key={index}
+                    className="w-full min-h-32 sm:min-h-48 h-fit rounded-lg sm:rounded-3xl bg-linear-to-br from-tertiary/30 via-50% via-transparent to-tertiary/5"
+                  />
+                ))
+              : sortedUnpinnedTasks?.map((task: Task) => (
                   <div key={task.id} className="break-inside-avoid">
                     <SortableTaskCard task={task} />
                   </div>
