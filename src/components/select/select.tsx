@@ -54,6 +54,7 @@ export default function Select({
       <SelectComponent
         value={selectedOption ? selectedOption.value : undefined}
         onValueChange={onChange}
+        disabled={disabled}
       >
         <SelectTrigger
           className={cn(
@@ -61,7 +62,6 @@ export default function Select({
             className
           )}
           isBadge={isCustomSelector}
-          disabled={disabled}
         >
           {isCustomSelector ? children : null}
           {!isCustomSelector ? (

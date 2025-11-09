@@ -6,10 +6,21 @@ export const getCookie = (name: string): string | null => {
   return null;
 };
 
-export const setCookie = (name: string, value: string, days: number) => {
+export const setCookie = (
+  name: string,
+  value: string,
+  days: number,
+  hours?: number,
+  minutes?: number
+) => {
   if (!name || !value) return;
   const date = new Date();
-  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  date.setTime(
+    date.getTime() +
+      days * 24 * 60 * 60 * 1000 +
+      (hours ? hours * 60 * 60 * 1000 : 0) +
+      (minutes ? minutes * 60 * 1000 : 0)
+  );
   const expires = `expires=${date.toUTCString()}`;
   document.cookie = `${name}=${value};${expires};path=/`;
 };
