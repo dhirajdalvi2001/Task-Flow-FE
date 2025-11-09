@@ -36,22 +36,36 @@ protectedAxiosInstance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error?.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401) {
       originalRequest._retry = true;
       const refreshToken = getCookie("refreshToken");
-      if (refreshToken) {
-        const response: any = await protectedAxiosInstance.post(
-          "/iam/refresh/",
-          {
-            refresh: refreshToken,
-          }
-        );
-        setCookie("accessToken", response.access, 1);
-        return response.data;
-      } else {
+
+      if (!refreshToken) {
         deleteCookie("accessToken");
         deleteCookie("refreshToken");
+        window.location.href = "/auth/login";
         return Promise.reject(error);
+      }
+
+      if (refreshToken && originalRequest._retry) {
+        try {
+          const response: any = await openAxiosInstance.post("/iam/refresh/", {
+            refresh: refreshToken,
+          });
+          if (!response.data.access) {
+            deleteCookie("accessToken");
+            deleteCookie("refreshToken");
+            window.location.href = "/auth/login";
+            return Promise.reject(error);
+          }
+          setCookie("accessToken", response.data.access, 1);
+          return response.data.data;
+        } catch (error) {
+          deleteCookie("accessToken");
+          deleteCookie("refreshToken");
+          window.location.href = "/auth/login";
+          return Promise.reject(error);
+        }
       }
     }
     return Promise.reject(error.response.data);

@@ -18,7 +18,6 @@ export default function Dashboard() {
       return response as unknown as DashboardCharts;
     },
     gcTime: 1000 * 60 * 10, // 10 minutes - cache time
-    enabled: !!accessToken,
   });
 
   // Memoize charts array to prevent recreation on every render

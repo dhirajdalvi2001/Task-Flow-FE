@@ -46,7 +46,6 @@ export default function MyTasks() {
       return response as unknown as Task[];
     },
     gcTime: 1000 * 60 * 10, // 10 minutes - cache time
-    enabled: !!accessToken,
   });
   const sensors = useSensors(
     useSensor(PointerSensor, {
