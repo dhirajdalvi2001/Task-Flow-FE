@@ -19,8 +19,10 @@ import { arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { invalidateQueries } from "@/lib/utils";
 import CreateTask from "./components/create-task";
+import { getCookie } from "@/lib/cookies";
 
 export default function MyTasks() {
+  const accessToken = getCookie("accessToken");
   const [sortedPinnedTasks, setSortedPinnedTasks] = useState<Task[]>([]);
   const [sortedUnpinnedTasks, setSortedUnpinnedTasks] = useState<Task[]>([]);
 
@@ -37,13 +39,14 @@ export default function MyTasks() {
   });
 
   const { data: myTasks, isLoading } = useQuery<Task[]>({
-    queryKey: ["get-my-tasks"],
+    queryKey: ["get-my-tasks", accessToken],
     queryFn: async () => {
       // The axios interceptor already returns response.data, so this returns Task[] directly
       const response = await protectedAxiosInstance.get<Task[]>("/tasks/");
       return response as unknown as Task[];
     },
     gcTime: 1000 * 60 * 10, // 10 minutes - cache time
+    enabled: !!accessToken,
   });
   const sensors = useSensors(
     useSensor(PointerSensor, {
