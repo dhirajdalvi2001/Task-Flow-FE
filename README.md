@@ -36,3 +36,25 @@ It helps users create, organize, and prioritize tasks with an intuitive and resp
 ```bash
 git clone https://github.com/yourusername/taskflow-frontend.git
 cd taskflow-frontend
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+```bash
+Create a .env file in the root directory and add your backend API URL:
+VITE_API_URL=https://api.yourdomain.com/api/
+```
+
+### 4. Start the development server
+```bash
+npm run dev
+```
+
+### 5. Build for production
+```bash
+npm run build
+```
